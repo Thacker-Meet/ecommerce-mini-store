@@ -52,6 +52,7 @@ const connectMongoDB = require("./config/mongo");
 const { connectMySQL } = require("./config/mysql");
 
 const pingRoutes = require("./routes/pingRoutes");
+const productRoutes = require("./routes/productRoutes");
 
 const app = express();
 
@@ -62,6 +63,7 @@ connectMongoDB();
 connectMySQL();
 
 app.use("/api", pingRoutes);
+app.use("/api/products", productRoutes);
 
 app.get("/", (req, res) => {
     res.send("Backend Running");
