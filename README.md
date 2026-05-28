@@ -2,71 +2,182 @@
 
 ## Project Overview
 
-This is a full-stack E-Commerce Mini Store project built using:
+E-Commerce Mini Store is a full-stack MERN-style e-commerce application built during internship training.
+
+The project includes:
+
+- React frontend
+- Node.js + Express backend
+- MongoDB Atlas database
+- MySQL integration
+- REST APIs
+- Dynamic product pages
+
+---
+
+# Tech Stack
+
+## Frontend
 
 - React.js
+- React Router DOM
+- Axios
+- CSS
+
+## Backend
+
 - Node.js
 - Express.js
 - MongoDB Atlas
+- Mongoose
 - MySQL
+- JWT
+- Express Validator
 
 ---
 
-## Features Completed
+# Folder Structure
 
-### Week 1
+```text
+E-Commerce Mini Store/
+│
+├── frontend/
+│
+├── backend/
+│
+├── screenshots/
+│
+├── README.md
+└── .gitignore
+```
 
-- React frontend setup using Vite
-- Express backend setup
+---
+
+# Backend Features Completed
+
+## Database
+
 - MongoDB Atlas connection
 - MySQL connection
-- `/api/ping` endpoint
-- Product Mongoose schema
-- CRUD product routes
-- 12 sample products seeded
-- Postman API testing
+
+## Product APIs
+
+- GET all products
+- GET single product
+- CREATE product
+- UPDATE product
+- DELETE product
+
+## Backend Improvements
+
+- Validation middleware
+- Error handling middleware
+- Pagination
+- Category filtering
 
 ---
 
-## API Endpoints
+# Frontend Features Completed
 
-### Products
+## Pages
 
-- GET `/api/products`
-- GET `/api/products/:id`
-- POST `/api/products`
-- PUT `/api/products/:id`
-- DELETE `/api/products/:id`
+- Home Page
+- Product List Page
+- Product Detail Page
 
----
+## React Features
 
-## Tech Stack
-
-### Frontend
-- React.js
-- Axios
-- React Router DOM
-
-### Backend
-- Node.js
-- Express.js
-- MongoDB + Mongoose
-- MySQL
-- JWT Authentication
+- React Router
+- Dynamic routing
+- Axios API calls
+- Product cards
+- Responsive product grid
+- Navbar navigation
 
 ---
 
-## Screenshots
+# API Endpoints
+
+## Products
+
+### Get All Products
+
+```http
+GET /api/products
+```
+
+### Get Product By ID
+
+```http
+GET /api/products/:id
+```
+
+### Create Product
+
+```http
+POST /api/products
+```
+
+### Update Product
+
+```http
+PUT /api/products/:id
+```
+
+### Delete Product
+
+```http
+DELETE /api/products/:id
+```
+
+---
+
+# Frontend Routes
+
+| Route | Description |
+|---|---|
+| `/` | Home Page |
+| `/products` | Product List |
+| `/products/:id` | Product Detail |
+
+---
+
+# Screenshots
 
 ![DB Status](./screenshots/db-status.png)
 
+# Current Progress
 
-## Current Status
+## Completed Till 28 May
 
-Backend foundation completed successfully.
+- Backend CRUD APIs
+- MongoDB integration
+- MySQL integration
+- Product schema
+- Seeded products
+- Validation middleware
+- Error handling
+- Pagination
+- React frontend setup
+- Product listing page
+- Product detail page
+- React Router integration
+- Dynamic product fetching
 
-Next:
-- React product listing UI
-- Authentication
+---
+
+# Upcoming Features
+
 - Cart functionality
-- Orders system
+- Authentication
+- JWT protected routes
+- Search functionality
+- Category filters
+- Admin dashboard
+- Order management
+
+---
+
+# Author
+
+Meet Thacker

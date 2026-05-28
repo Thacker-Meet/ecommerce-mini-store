@@ -1,57 +1,40 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { Routes, Route } from "react-router-dom";
+
+import Navbar from "./components/Navbar";
+
+import HomePage from "./pages/HomePage";
+
+import ProductListPage from "./pages/ProductListPage";
+
+import ProductDetailPage from "./pages/ProductDetailPage";
+
 
 function App() {
 
-  const [dbStatus, setDbStatus] = useState({
-    mongo: "",
-    mysql: "",
-  });
-
-  useEffect(() => {
-
-    const fetchPing = async () => {
-      try {
-
-        const response = await axios.get(
-          "http://localhost:5000/api/ping"
-        );
-
-        setDbStatus(response.data);
-
-      } catch (error) {
-
-        console.log(error);
-
-        setDbStatus({
-          mongo: "Error",
-          mysql: "Error",
-        });
-      }
-    };
-
-    fetchPing();
-
-  }, []);
-
   return (
-    <div style={{ padding: "30px" }}>
 
-      <h1>E-Commerce Mini Store</h1>
+    <>
+      <Navbar />
 
-      <h2>Database Status</h2>
+      <Routes>
 
-      <p>
-        MongoDB:
-        <strong> {dbStatus.mongo}</strong>
-      </p>
+        <Route
+          path="/"
+          element={<HomePage />}
+        />
 
-      <p>
-        MySQL:
-        <strong> {dbStatus.mysql}</strong>
-      </p>
+        <Route
+          path="/products"
+          element={<ProductListPage />}
+        />
 
-    </div>
+        <Route
+          path="/products/:id"
+          element={<ProductDetailPage />}
+        />
+
+      </Routes>
+    </>
   );
 }
 

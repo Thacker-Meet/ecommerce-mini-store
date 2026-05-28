@@ -3,17 +3,46 @@ const Product = require("../models/productModel");
 
 // GET all products
 const getProducts = async (req, res) => {
+
   try {
 
-    const products = await Product.find();
+    const page = Number(req.query.page) || 1;
 
-    res.json(products);
+    const limit = 5;
+
+    const skip = (page - 1) * limit;
+
+    const category = req.query.category;
+
+    let filter = {};
+
+    if (category) {
+      filter.category = category;
+    }
+
+    const products = await Product.find(filter)
+      .skip(skip)
+      .limit(limit);
+
+    const totalProducts = await Product.countDocuments(filter);
+
+    res.status(200).json({
+
+      products,
+
+      currentPage: page,
+
+      totalPages: Math.ceil(totalProducts / limit),
+
+      totalProducts,
+
+    });
 
   } catch (error) {
 
-    res.status(500).json({
-      message: error.message,
-    });
+    res.status(500);
+
+    throw new Error(error.message);
   }
 };
 

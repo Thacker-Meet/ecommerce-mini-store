@@ -8,6 +8,10 @@ const {
   deleteProduct,
 } = require("../controllers/productController");
 
+const productValidationRules = require("../validators/productValidator");
+
+const validate = require("../middleware/validate");
+
 const router = express.Router();
 
 
@@ -20,11 +24,21 @@ router.get("/:id", getProductById);
 
 
 // CREATE product
-router.post("/", createProduct);
+router.post(
+  "/",
+  productValidationRules,
+  validate,
+  createProduct
+);
 
 
 // UPDATE product
-router.put("/:id", updateProduct);
+router.put(
+  "/:id",
+  productValidationRules,
+  validate,
+  updateProduct
+);
 
 
 // DELETE product

@@ -53,7 +53,7 @@ const { connectMySQL } = require("./config/mysql");
 
 const pingRoutes = require("./routes/pingRoutes");
 const productRoutes = require("./routes/productRoutes");
-
+const errorHandler = require("./middleware/errorHandler");
 const app = express();
 
 app.use(cors());
@@ -61,7 +61,7 @@ app.use(express.json());
 
 connectMongoDB();
 connectMySQL();
-
+app.use(errorHandler);
 app.use("/api", pingRoutes);
 app.use("/api/products", productRoutes);
 
