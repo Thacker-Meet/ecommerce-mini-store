@@ -144,7 +144,35 @@ DELETE /api/products/:id
 
 # Screenshots
 
+### DB Status
 ![DB Status](./screenshots/db-status.png)
+
+## Desktop View
+### Home Page
+
+![Home Page](./screenshots/desktop-home-page.png)
+
+### Product List
+
+![Product List](./screenshots/desktop-product-page.png)
+
+### Product Detail
+
+![Product Detail](./screenshots/desktop-detail-page.png)
+
+
+## Mobile View
+### Home Page
+
+![Home Page](./screenshots/mobile-home-page.png)
+
+### Product List
+
+![Product List](./screenshots/mobile-product-page.png)
+
+### Product Detail
+
+![Product Detail](./screenshots/mobile-detail-page.png)
 
 # Current Progress
 

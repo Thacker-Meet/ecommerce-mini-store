@@ -6,9 +6,12 @@ function Navbar() {
 
     <nav className="navbar">
 
-      <h2 className="logo">
+      <Link
+        to="/"
+        className="logo"
+      >
         MiniStore
-      </h2>
+      </Link>
 
       <div className="nav-links">
 

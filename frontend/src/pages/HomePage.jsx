@@ -19,7 +19,7 @@ function HomePage() {
 
   const [error, setError] = useState("");
 
-
+  const [searchTerm, setSearchTerm] = useState("");
   useEffect(() => {
 
     const fetchProducts = async () => {
@@ -53,6 +53,14 @@ function HomePage() {
     return <h1>{error}</h1>;
   }
 
+  const popularProducts = products.slice(0, 6);
+
+  const filteredProducts = popularProducts.filter(
+    (product) =>
+      product.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+  );
 
   return (
 
@@ -66,13 +74,22 @@ function HomePage() {
         Discover amazing products at the best prices
       </p>
 
+      <input
+        type="text"
+        placeholder="Search products..."
+        className="search-bar"
+        value={searchTerm}
+        onChange={(e) =>
+          setSearchTerm(e.target.value)
+        }
+      />
       <h2 className="section-title">
         Popular Products
       </h2>
 
       <div className="product-grid">
 
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
 
           <ProductCard
             key={product._id}

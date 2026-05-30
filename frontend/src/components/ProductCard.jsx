@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import "../styles/productCard.css";
 
-
 function ProductCard({ product }) {
 
   return (
@@ -13,20 +12,38 @@ function ProductCard({ product }) {
 
       <div className="product-card">
 
-        <img
-          src="https://via.placeholder.com/200"
-          alt={product.name}
-        />
+        <div className="product-image-container">
 
-        <h2>{product.name}</h2>
+          <img
+            src="https://via.placeholder.com/200"
+            alt={product.name}
+          />
 
-        <p>{product.category}</p>
+        </div>
 
-        <h3>₹ {product.price}</h3>
+        <div className="product-info">
 
-        <p>Stock: {product.stock}</p>
+          <div className="product-meta">
 
-        <button>Add to Cart</button>
+            <h2>{product.name}</h2>
+
+            <p>{product.category}</p>
+
+            <p>
+              Stock: {product.stock}
+            </p>
+
+          </div>
+
+          <h3>
+            ₹ {product.price}
+          </h3>
+
+        </div>
+
+        <button>
+          Add to Cart
+        </button>
 
       </div>
 

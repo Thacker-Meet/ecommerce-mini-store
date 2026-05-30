@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { useParams } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 
 import "../styles/productDetail.css";
@@ -16,7 +16,7 @@ function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState("");
-
+  const navigate = useNavigate();
 
   useEffect(() => {
 
@@ -55,13 +55,23 @@ function ProductDetailPage() {
   return (
 
     <div className="detail-container">
-        <h1>Product Detail</h1>
+      <button
+        className="back-btn"
+        onClick={() => navigate(-1)}
+      >
+        ← Back
+      </button>
+      <h1>Product Detail</h1>
       <div className="detail-card">
-        
-        <img
-          src="https://via.placeholder.com/400"
-          alt={product.name}
-        />
+
+        <div className="detail-image">
+
+          <img
+            src="https://via.placeholder.com/400"
+            alt={product.name}
+          />
+
+        </div>
 
         <div className="detail-content">
 

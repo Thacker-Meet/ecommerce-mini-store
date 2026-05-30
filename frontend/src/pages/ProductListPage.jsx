@@ -5,11 +5,8 @@ import API from "../services/api";
 import ProductCard from "../components/ProductCard";
 
 import "../styles/global.css";
-
 import "../styles/productList.css";
-
 import "../styles/productCard.css";
-
 
 function ProductListPage() {
 
@@ -19,6 +16,12 @@ function ProductListPage() {
 
   const [error, setError] = useState("");
 
+  const [selectedCategory, setSelectedCategory] =
+    useState("All");
+
+  const [searchTerm, setSearchTerm] =
+    useState("");
+
 
   useEffect(() => {
 
@@ -26,15 +29,21 @@ function ProductListPage() {
 
       try {
 
-        const response = await API.get("/products");
+        const response =
+          await API.get("/products");
 
-        setProducts(response.data.products || response.data);
+        setProducts(
+          response.data.products ||
+          response.data
+        );
 
         setLoading(false);
 
       } catch (err) {
 
-        setError("Failed to fetch products");
+        setError(
+          "Failed to fetch products"
+        );
 
         setLoading(false);
       }
@@ -45,12 +54,72 @@ function ProductListPage() {
   }, []);
 
 
+  const categories = [
+
+    "All",
+
+    "Mobiles",
+
+    "Laptops",
+
+    "Headphones",
+
+    "Smartwatch",
+
+    "Camera",
+
+    "Shoes",
+
+    "Clothing",
+
+    "Accessories",
+
+  ];
+
+
+  const filteredProducts =
+    products.filter((product) => {
+
+      const matchesCategory =
+
+        selectedCategory === "All" ||
+
+        product.category === selectedCategory;
+
+
+      const matchesSearch =
+
+        product.name
+          .toLowerCase()
+          .includes(
+            searchTerm.toLowerCase()
+          );
+
+
+      return (
+        matchesCategory &&
+        matchesSearch
+      );
+    });
+
+
   if (loading) {
-    return <h1>Loading products...</h1>;
+
+    return (
+      <h1 className="loading">
+        Loading products...
+      </h1>
+    );
   }
 
+
   if (error) {
-    return <h1>{error}</h1>;
+
+    return (
+      <h1 className="error">
+        {error}
+      </h1>
+    );
   }
 
 
@@ -58,20 +127,78 @@ function ProductListPage() {
 
     <div className="home-container">
 
-      <h1 className="section-title">
+      <h1 className="product-list-title">
         All Products
       </h1>
 
-      <div className="product-grid">
+      <p className="product-count">
+        {filteredProducts.length} Products Found
+      </p>
 
-        {products.map((product) => (
+      {/* Search Bar */}
 
-          <ProductCard
-            key={product._id}
-            product={product}
-          />
+      <input
+        type="text"
+        placeholder="Search products..."
+        className="search-bar"
+        value={searchTerm}
+        onChange={(e) =>
+          setSearchTerm(e.target.value)
+        }
+      />
+
+      {/* Category Filters */}
+
+      <div className="category-filters">
+
+        {categories.map((category) => (
+
+          <button
+            key={category}
+            className={
+              selectedCategory === category
+                ? "active-category"
+                : ""
+            }
+            onClick={() =>
+              setSelectedCategory(category)
+            }
+          >
+            {category}
+          </button>
 
         ))}
+
+      </div>
+
+      {/* Products */}
+
+      <div className="product-grid">
+
+        {filteredProducts.length > 0 ? (
+
+          filteredProducts.map((product) => (
+
+            <ProductCard
+              key={product._id}
+              product={product}
+            />
+
+          ))
+
+        ) : (
+
+          <div className="empty-state">
+
+            <h2>No Products Found</h2>
+
+            <p>
+              Try changing category or search term.
+            </p>
+
+          </div>
+
+        )}
 
       </div>
 
