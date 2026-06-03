@@ -10,6 +10,8 @@ import "../styles/home.css";
 
 import "../styles/productCard.css";
 
+import "../styles/status.css";
+
 
 function HomePage() {
 
@@ -46,12 +48,40 @@ function HomePage() {
 
 
   if (loading) {
-    return <h1>Loading products...</h1>;
-  }
+
+  return (
+
+    <div className="loading-container">
+
+      <h1>Loading Products...</h1>
+
+      <p>Please wait</p>
+
+    </div>
+  );
+}
 
   if (error) {
-    return <h1>{error}</h1>;
-  }
+
+  return (
+
+    <div className="error-container">
+
+      <h1>Something went wrong</h1>
+
+      <p>{error}</p>
+
+      <button
+        onClick={() =>
+          window.location.reload()
+        }
+      >
+        Retry
+      </button>
+
+    </div>
+  );
+}
 
   const popularProducts = products.slice(0, 6);
 

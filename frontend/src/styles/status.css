@@ -1,0 +1,42 @@
+.loading-container,
+.error-container {
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  min-height: 60vh;
+
+  text-align: center;
+}
+
+.loading-container h1 {
+
+  color: #2563eb;
+}
+
+.error-container h1 {
+
+  color: #dc2626;
+}
+
+.error-container button {
+
+  margin-top: 20px;
+
+  padding: 12px 20px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #2563eb;
+
+  color: white;
+
+  cursor: pointer;
+}

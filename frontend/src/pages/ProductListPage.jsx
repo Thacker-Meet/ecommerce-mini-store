@@ -7,6 +7,7 @@ import ProductCard from "../components/ProductCard";
 import "../styles/global.css";
 import "../styles/productList.css";
 import "../styles/productCard.css";
+import "../styles/status.css";
 
 function ProductListPage() {
 
@@ -105,22 +106,39 @@ function ProductListPage() {
 
   if (loading) {
 
-    return (
-      <h1 className="loading">
-        Loading products...
-      </h1>
-    );
-  }
+  return (
 
+    <div className="loading-container">
+
+      <h1>Loading Products...</h1>
+
+      <p>Please wait</p>
+
+    </div>
+  );
+}
 
   if (error) {
 
-    return (
-      <h1 className="error">
-        {error}
-      </h1>
-    );
-  }
+  return (
+
+    <div className="error-container">
+
+      <h1>Something went wrong</h1>
+
+      <p>{error}</p>
+
+      <button
+        onClick={() =>
+          window.location.reload()
+        }
+      >
+        Retry
+      </button>
+
+    </div>
+  );
+}
 
 
   return (
