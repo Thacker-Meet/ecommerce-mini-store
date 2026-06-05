@@ -66,3 +66,25 @@
     justify-content: center;
   }
 }
+
+.user-name {
+  color: #4b5563;
+  font-weight: 600;
+  align-self: center;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: #111827;
+  font-weight: 600;
+  font-size: inherit;
+  font-family: inherit;
+  cursor: pointer;
+  transition: 0.3s;
+  padding: 0;
+}
+
+.logout-btn:hover {
+  color: #dc2626;
+}

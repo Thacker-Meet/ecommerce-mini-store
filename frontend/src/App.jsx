@@ -1,23 +1,17 @@
 import { Routes, Route } from "react-router-dom";
-
 import Navbar from "./components/Navbar";
-
 import HomePage from "./pages/HomePage";
-
 import ProductListPage from "./pages/ProductListPage";
-
 import ProductDetailPage from "./pages/ProductDetailPage";
-
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
 
 function App() {
-
   return (
-
     <>
       <Navbar />
 
       <Routes>
-
         <Route
           path="/"
           element={<HomePage />}
@@ -33,6 +27,15 @@ function App() {
           element={<ProductDetailPage />}
         />
 
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
+
+        <Route
+          path="/signup"
+          element={<SignupPage />}
+        />
       </Routes>
     </>
   );

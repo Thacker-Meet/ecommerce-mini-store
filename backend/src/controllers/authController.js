@@ -172,7 +172,38 @@ const login = async (req, res) => {
   }
 };
 
+const getMe = (req, res) => {
+
+    mysqlConnection.query(
+        "SELECT id, name, email, role, created_at FROM users WHERE id = ?",
+        [req.user.id],
+        (err, results) => {
+
+            if (err) {
+
+                return res.status(500).json({
+                    message:
+                        "Database error",
+                });
+            }
+
+            if (
+                results.length === 0
+            ) {
+
+                return res.status(404).json({
+                    message:
+                        "User not found",
+                });
+            }
+
+            res.json(results[0]);
+        }
+    );
+};
+
 module.exports = {
   signup,
   login,
+  getMe,
 };

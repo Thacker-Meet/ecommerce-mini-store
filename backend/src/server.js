@@ -14,7 +14,10 @@ const authRoutes =
   require(
     "./routes/authRoutes"
   );
-
+const protectedRoutes =
+    require(
+        "./routes/protectedRoutes"
+    );
 
 app.use(cors());
 app.use(express.json());
@@ -27,6 +30,11 @@ app.use("/api/products", productRoutes);
 app.use(
   "/api/auth",
   authRoutes
+);
+
+app.use(
+    "/api/protected",
+    protectedRoutes
 );
 
 app.get("/", (req, res) => {
