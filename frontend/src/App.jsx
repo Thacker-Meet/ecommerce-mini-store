@@ -1,10 +1,15 @@
 import { Routes, Route } from "react-router-dom";
+
 import Navbar from "./components/Navbar";
+
+import ProtectedRoute from "./components/ProtectedRoute";
+
 import HomePage from "./pages/HomePage";
 import ProductListPage from "./pages/ProductListPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import OrdersPage from "./pages/OrdersPage";
 
 function App() {
   return (
@@ -35,6 +40,15 @@ function App() {
         <Route
           path="/signup"
           element={<SignupPage />}
+        />
+
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <OrdersPage />
+            </ProtectedRoute>
+          }
         />
       </Routes>
     </>

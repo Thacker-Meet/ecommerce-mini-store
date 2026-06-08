@@ -131,6 +131,26 @@
   text-decoration: underline;
 }
 
+.show-password {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  font-size: 14px;
+
+  color: #4b5563;
+
+  margin-top: 8px;
+}
+
+.show-password input {
+
+  width: auto;
+}
+
 @media (max-width: 480px) {
   .auth-card {
     padding: 30px 20px;

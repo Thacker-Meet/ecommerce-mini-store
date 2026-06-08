@@ -4,6 +4,7 @@ import "../styles/navbar.css";
 
 function Navbar() {
   const { user, logout } = useAuth();
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -29,15 +30,30 @@ function Navbar() {
 
         {user ? (
           <>
-            <span className="user-name">Welcome, {user.name}</span>
-            <button className="logout-btn" onClick={handleLogout}>
+            <Link to="/orders">
+              Orders
+            </Link>
+
+            <span className="user-name">
+              Hello {user.name}
+            </span>
+
+            <button
+              className="logout-btn"
+              onClick={handleLogout}
+            >
               Logout
             </button>
           </>
         ) : (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Signup</Link>
+            <Link to="/login">
+              Login
+            </Link>
+
+            <Link to="/signup">
+              Signup
+            </Link>
           </>
         )}
       </div>
