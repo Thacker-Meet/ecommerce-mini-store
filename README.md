@@ -1,98 +1,173 @@
 # E-Commerce Mini Store
 
-## Project Overview
+A full-stack E-Commerce Mini Store built as part of a structured internship roadmap.
 
-E-Commerce Mini Store is a full-stack MERN-style e-commerce application built during internship training.
+## Tech Stack
 
-The project includes:
+### Frontend
 
-- React frontend
-- Node.js + Express backend
-- MongoDB Atlas database
-- MySQL integration
-- REST APIs
-- Dynamic product pages
+* React (Vite)
+* React Router DOM
+* Axios
+* Context API
+* CSS (Vanilla)
 
----
+### Backend
 
-# Tech Stack
+* Node.js
+* Express.js
 
-## Frontend
+### Databases
 
-- React.js
-- React Router DOM
-- Axios
-- CSS
+* MongoDB Atlas (Products)
+* MySQL (Users, Orders, Order Items)
 
-## Backend
+### Authentication & Security
 
-- Node.js
-- Express.js
-- MongoDB Atlas
-- Mongoose
-- MySQL
-- JWT
-- Express Validator
+* JWT (JSON Web Tokens)
+* bcrypt (Password Hashing)
+* Role-based Access Control (Admin / User)
 
 ---
 
-# Folder Structure
+# Features
+
+## Product Management
+
+* Product Listing
+* Product Details
+* Search Products
+* Category Filtering
+* Responsive Product Cards
+
+## Shopping Cart
+
+* Add to Cart from Product List & Detail pages
+* Dynamic "Add to Cart" / "Go to Cart" button state
+* Quantity increment / decrement
+* Remove items from cart
+* Cart persists using localStorage
+* Cart item count badge in Navbar
+
+## Checkout & Orders
+
+* Checkout page with shipping information form
+* Place Order API (MongoDB stock validation + MySQL order storage)
+* Atomic stock decrement with rollback on failure
+* Order Confirmation page with Order ID
+* Order History page (user-specific)
+
+## Authentication
+
+* User Signup
+* User Login
+* Password Hashing (bcrypt)
+* JWT Authentication
+* Protected Routes
+* Current User Endpoint (`/api/auth/me`)
+
+## Admin Dashboard
+
+* Admin role verification from database
+* Admin middleware for backend route protection
+* Admin Layout with sidebar navigation
+* `/admin/products` — Product management view
+* `/admin/orders` — All orders management view
+* Admin-only Navbar link (visible only to admins)
+* Non-admin users are blocked from admin routes
+
+## User Experience
+
+* Responsive Design
+* Loading States
+* Error Handling
+* Show/Hide Password Toggle
+* Persistent Login Session
+* Logout Functionality
+* User-friendly stock error messages
+
+---
+
+# Project Structure
 
 ```text
-E-Commerce Mini Store/
+E-Commerce Mini Store
 │
-├── frontend/
+├── frontend
+│   └── src
+│       ├── components
+│       │   ├── AdminLayout.jsx
+│       │   ├── AdminRoute.jsx
+│       │   ├── Navbar.jsx
+│       │   ├── ProductCard.jsx
+│       │   └── ProtectedRoute.jsx
+│       ├── context
+│       │   ├── AuthContext.jsx
+│       │   └── CartContext.jsx
+│       ├── hooks
+│       │   ├── useAuth.js
+│       │   └── useCart.js
+│       ├── pages
+│       │   ├── AdminOrdersPage.jsx
+│       │   ├── AdminProductsPage.jsx
+│       │   ├── CartPage.jsx
+│       │   ├── CheckoutPage.jsx
+│       │   ├── HomePage.jsx
+│       │   ├── LoginPage.jsx
+│       │   ├── OrderConfirmationPage.jsx
+│       │   ├── OrdersPage.jsx
+│       │   ├── ProductDetailPage.jsx
+│       │   ├── ProductListPage.jsx
+│       │   └── SignupPage.jsx
+│       ├── services
+│       │   └── api.js
+│       ├── styles
+│       │   ├── admin.css
+│       │   ├── auth.css
+│       │   ├── cart.css
+│       │   ├── global.css
+│       │   ├── home.css
+│       │   ├── navbar.css
+│       │   ├── productCard.css
+│       │   ├── productDetail.css
+│       │   ├── productList.css
+│       │   └── status.css
+│       ├── App.jsx
+│       ├── main.jsx
+│       └── index.css
 │
-├── backend/
+├── backend
+│   └── src
+│       ├── config
+│       │   ├── mongo.js
+│       │   └── mysql.js
+│       ├── controllers
+│       │   ├── authController.js
+│       │   ├── orderController.js
+│       │   └── productController.js
+│       ├── data
+│       │   └── products.js
+│       ├── middleware
+│       │   ├── adminMiddleware.js
+│       │   ├── authMiddleware.js
+│       │   ├── errorHandler.js
+│       │   └── validate.js
+│       ├── models
+│       │   └── productModel.js
+│       ├── routes
+│       │   ├── authRoutes.js
+│       │   ├── orderRoutes.js
+│       │   ├── pingRoutes.js
+│       │   ├── productRoutes.js
+│       │   └── protectedRoutes.js
+│       ├── validators
+│       │   └── productValidator.js
+│       ├── seedProducts.js
+│       ├── server.js
+│       └── testOrders.js
 │
-├── screenshots/
-│
-├── README.md
-└── .gitignore
+└── screenshots
 ```
-
----
-
-# Backend Features Completed
-
-## Database
-
-- MongoDB Atlas connection
-- MySQL connection
-
-## Product APIs
-
-- GET all products
-- GET single product
-- CREATE product
-- UPDATE product
-- DELETE product
-
-## Backend Improvements
-
-- Validation middleware
-- Error handling middleware
-- Pagination
-- Category filtering
-
----
-
-# Frontend Features Completed
-
-## Pages
-
-- Home Page
-- Product List Page
-- Product Detail Page
-
-## React Features
-
-- React Router
-- Dynamic routing
-- Axios API calls
-- Product cards
-- Responsive product grid
-- Navbar navigation
 
 ---
 
@@ -100,112 +175,189 @@ E-Commerce Mini Store/
 
 ## Products
 
-### Get All Products
+| Method | Endpoint | Access | Description |
+|--------|---------------------|--------|-------------------------------|
+| GET | `/api/products` | Public | Get all products |
+| GET | `/api/products/:id` | Public | Get single product by ID |
+| POST | `/api/products` | Admin | Create a new product |
+| PUT | `/api/products/:id` | Admin | Update a product |
+| DELETE | `/api/products/:id` | Admin | Delete a product |
 
-```http
-GET /api/products
-```
+## Authentication
 
-### Get Product By ID
+| Method | Endpoint | Access | Description |
+|--------|---------------------|---------|-------------------------------|
+| POST | `/api/auth/signup` | Public | Register a new user |
+| POST | `/api/auth/login` | Public | Login and receive JWT |
+| GET | `/api/auth/me` | Private | Get current user profile |
 
-```http
-GET /api/products/:id
-```
+## Orders
 
-### Create Product
+| Method | Endpoint | Access | Description |
+|--------|--------------------------|---------|-------------------------------|
+| POST | `/api/orders` | Private | Place a new order |
+| GET | `/api/orders/my-orders` | Private | Get logged-in user's orders |
+| GET | `/api/orders` | Admin | Get all orders (admin only) |
 
-```http
-POST /api/products
-```
+## Protected Routes
 
-### Update Product
-
-```http
-PUT /api/products/:id
-```
-
-### Delete Product
-
-```http
-DELETE /api/products/:id
-```
-
----
-
-# Frontend Routes
-
-| Route | Description |
-|---|---|
-| `/` | Home Page |
-| `/products` | Product List |
-| `/products/:id` | Product Detail |
+| Method | Endpoint | Access | Description |
+|--------|------------------------------|---------|-------------------------------|
+| GET | `/api/protected/dashboard` | Private | Test protected route access |
 
 ---
 
-# Screenshots
+# Database Schema
 
-### DB Status
-![DB Status](./screenshots/db-status.png)
+## MongoDB (Products Collection)
 
-## Desktop View
-### Home Page
+| Field | Type | Required |
+|-------------|---------|----------|
+| name | String | Yes |
+| slug | String | Yes |
+| price | Number | Yes |
+| category | String | Yes |
+| images | [String] | No |
+| stock | Number | Yes |
+| description | String | Yes |
 
-![Home Page](./screenshots/desktop-home-page.png)
+## MySQL (Users Table)
 
-### Product List
+| Field | Type | Description |
+|---------------|--------------|----------------------|
+| id | INT (PK) | Auto-increment |
+| name | VARCHAR | User's full name |
+| email | VARCHAR | Unique email |
+| password_hash | VARCHAR | bcrypt hashed password|
+| role | VARCHAR | 'user' or 'admin' |
+| created_at | TIMESTAMP | Account creation date |
 
-![Product List](./screenshots/desktop-product-page.png)
+## MySQL (Orders Table)
 
-### Product Detail
+| Field | Type | Description |
+|--------------|----------------|-------------------------------|
+| id | INT (PK) | Auto-increment |
+| user_id | INT (FK) | References users(id) |
+| total_amount | DECIMAL(10,2) | Order total price |
+| status | VARCHAR(50) | 'Pending', 'Completed', etc. |
+| created_at | TIMESTAMP | Order placement date |
 
-![Product Detail](./screenshots/desktop-detail-page.png)
+## MySQL (Order Items Table)
 
-
-## Mobile View
-### Home Page
-
-![Home Page](./screenshots/mobile-home-page.png)
-
-### Product List
-
-![Product List](./screenshots/mobile-product-page.png)
-
-### Product Detail
-
-![Product Detail](./screenshots/mobile-detail-page.png)
-
-# Current Progress
-
-## Completed Till 28 May
-
-- Backend CRUD APIs
-- MongoDB integration
-- MySQL integration
-- Product schema
-- Seeded products
-- Validation middleware
-- Error handling
-- Pagination
-- React frontend setup
-- Product listing page
-- Product detail page
-- React Router integration
-- Dynamic product fetching
+| Field | Type | Description |
+|--------------|----------------|-------------------------------|
+| id | INT (PK) | Auto-increment |
+| order_id | INT (FK) | References orders(id) |
+| product_id | VARCHAR(24) | MongoDB product ObjectId |
+| product_name | VARCHAR(255) | Snapshot of product name |
+| quantity | INT | Number of items ordered |
+| price | DECIMAL(10,2) | Price per unit at order time |
 
 ---
 
-# Upcoming Features
+# Completed Roadmap
 
-- Cart functionality
-- Authentication
-- JWT protected routes
-- Search functionality
-- Category filters
-- Admin dashboard
-- Order management
+## Week 1
+
+* Backend Setup
+* MongoDB Integration
+* Product APIs
+* Product Model
+* Product CRUD Foundation
+
+## Week 2
+
+* React Setup
+* Home Page
+* Product List Page
+* Product Detail Page
+* Search
+* Category Filters
+* Responsive UI
+
+## Week 3
+
+* MySQL Setup
+* Users Table
+* JWT Authentication
+* Signup API
+* Login API
+* Auth Middleware
+* Protected Routes
+* AuthContext
+* Login Page
+* Signup Page
+* Orders Protected Page
+* Form Validation
+* Password Visibility Toggle
+* Loading & Error States
+
+## Week 4
+
+* Cart Context & Cart Provider
+* useCart Hook
+* Add to Cart (Product List & Detail pages)
+* Dynamic "Add to Cart" / "Go to Cart" button
+* Cart persistence via localStorage
+* Cart Page
+* Checkout Page with shipping form
+* Order Confirmation Page
+* Orders History Page
+* MySQL Orders & Order Items Tables
+* POST /api/orders (stock validation + MySQL insert)
+* GET /api/orders/my-orders
+* Atomic MongoDB stock decrement with rollback
+* Out-of-stock error handling
+* Frontend checkout validation
+* Admin role check via JWT
+* Admin middleware (DB role verification)
+* Admin Layout & Sidebar
+* /admin/products management page
+* /admin/orders management page
+* Protected admin routes (frontend & backend)
+* Admin-only Navbar links
+
+---
+
+# Installation
+
+## Backend
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+## Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+## Environment Variables
+
+Create a `.env` file inside the `backend` directory:
+
+```env
+PORT=5000
+MONGO_URI=your_mongodb_atlas_connection_string
+MYSQL_HOST=localhost
+MYSQL_USER=root
+MYSQL_PASSWORD=your_mysql_password
+MYSQL_DATABASE=ecommerce
+JWT_SECRET=your_jwt_secret_key
+JWT_EXPIRES_IN=7d
+```
 
 ---
 
 # Author
 
 Meet Thacker
+
+Computer Science Engineering Student
+
+Built as part of internship training and full-stack learning roadmap.

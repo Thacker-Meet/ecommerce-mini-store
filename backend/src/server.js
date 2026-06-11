@@ -1,4 +1,3 @@
-
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
@@ -8,6 +7,7 @@ const { connectMySQL } = require("./config/mysql");
 
 const pingRoutes = require("./routes/pingRoutes");
 const productRoutes = require("./routes/productRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 const errorHandler = require("./middleware/errorHandler");
 const app = express();
 const authRoutes =
@@ -15,9 +15,9 @@ const authRoutes =
     "./routes/authRoutes"
   );
 const protectedRoutes =
-    require(
-        "./routes/protectedRoutes"
-    );
+  require(
+    "./routes/protectedRoutes"
+  );
 
 app.use(cors());
 app.use(express.json());
@@ -27,22 +27,23 @@ connectMySQL();
 app.use(errorHandler);
 app.use("/api", pingRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
 app.use(
   "/api/auth",
   authRoutes
 );
 
 app.use(
-    "/api/protected",
-    protectedRoutes
+  "/api/protected",
+  protectedRoutes
 );
 
 app.get("/", (req, res) => {
-    res.send("Backend Running");
+  res.send("Backend Running");
 });
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
