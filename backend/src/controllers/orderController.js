@@ -212,8 +212,46 @@ const getAllOrders = async (req, res) => {
   }
 };
 
+// @desc    Update order status (Admin only)
+// @route   PUT /api/orders/:id/status
+// @access  Private/Admin
+const updateOrderStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const validStatuses = ["Pending", "Paid", "Shipped", "Delivered"];
+
+    if (!status || !validStatuses.includes(status)) {
+      return res.status(400).json({
+        message: `Invalid status. Must be one of: ${validStatuses.join(", ")}`,
+      });
+    }
+
+    // Check if order exists
+    const existingOrder = await query("SELECT id FROM orders WHERE id = ?", [id]);
+
+    if (existingOrder.length === 0) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // Update the status
+    await query("UPDATE orders SET status = ? WHERE id = ?", [status, id]);
+
+    res.json({
+      message: "Order status updated successfully",
+      orderId: Number(id),
+      status,
+    });
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    res.status(500).json({ message: "Failed to update order status", error: error.message });
+  }
+};
+
 module.exports = {
   createOrder,
   getMyOrders,
   getAllOrders,
+  updateOrderStatus,
 };
