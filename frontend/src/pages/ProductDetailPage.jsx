@@ -48,18 +48,19 @@ function ProductDetailPage() {
   if (loading) {
     return (
       <div className="loading-container">
-        <h1>Loading Products...</h1>
+        <h1>Loading Product...</h1>
         <p>Please wait</p>
       </div>
     );
   }
 
-  if (error) {
+  if (error || !product) {
     return (
       <div className="error-container">
         <h1>Something went wrong</h1>
-        <p>{error}</p>
+        <p>{error || "Product not found"}</p>
         <button
+          className="btn-primary"
           onClick={() =>
             window.location.reload()
           }
@@ -71,40 +72,53 @@ function ProductDetailPage() {
   }
 
   return (
-    <div className="detail-container">
+    <div className="detail-container fade-in">
       <button
         className="back-btn"
         onClick={() => navigate(-1)}
       >
         ← Back
       </button>
-      <h1>Product Detail</h1>
+      
       <div className="detail-card">
         <div className="detail-image">
           <img
-            src="https://via.placeholder.com/400"
+            src={product.image ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${product.image}` : "/placeholder.png"}
             alt={product.name}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.style.display = 'none';
+              e.target.parentNode.classList.add('no-image');
+            }}
           />
+          <div className="no-image-text">No Image Available</div>
         </div>
 
         <div className="detail-content">
           <h1>{product.name}</h1>
-          <p>
-            Category: {product.category}
+          <p className="category-label">
+            {product.category}
           </p>
           <h2>₹ {product.price}</h2>
-          <p>
-            Stock: {product.stock}
-          </p>
-          <p>
-            {product.description}
-          </p>
+          
+          <div className="stock-info">
+             <span className={product.stock > 0 ? "in-stock" : "out-of-stock"}>
+              {product.stock > 0 ? `In Stock: ${product.stock}` : "Out of Stock"}
+            </span>
+          </div>
+
+          <div className="product-description">
+            <h3>Description</h3>
+            <p>{product.description}</p>
+          </div>
+          
           <button 
+            className={`add-to-cart-btn ${isInCart ? 'go-to-cart-btn' : ''}`}
             onClick={handleButtonClick}
             disabled={product.stock <= 0 && !isInCart}
             style={{ 
               opacity: (product.stock <= 0 && !isInCart) ? 0.6 : 1,
-              backgroundColor: isInCart ? "#10b981" : "#111827"
+              backgroundColor: isInCart ? "var(--secondary-color)" : "var(--primary-color)"
             }}
           >
             {product.stock <= 0 && !isInCart ? "Out of Stock" : isInCart ? "Go to Cart" : "Add to Cart"}

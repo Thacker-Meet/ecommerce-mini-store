@@ -14,7 +14,7 @@
 
 .admin-sidebar {
   width: 250px;
-  background: #1e293b;
+  background: var(--primary-color);
   color: white;
   padding: 30px 20px;
   display: flex;
@@ -56,13 +56,13 @@
 }
 
 .admin-sidebar-link:hover {
-  background: #334155;
+  background: var(--secondary-color);
   color: white;
 }
 
 .admin-sidebar-link.active {
-  background: #2563eb;
-  color: white;
+  background: var(--accent-color);
+  color: var(--primary-color);
 }
 
 .admin-content {

@@ -1,6 +1,6 @@
-# E-Commerce Mini Store
+# Cartify - Your One-Stop Online Shopping Destination
 
-A full-stack E-Commerce Mini Store built as part of a structured internship roadmap.
+A full-stack E-Commerce platform built as part of a structured internship roadmap.
 
 ## Tech Stack
 
@@ -91,7 +91,7 @@ A full-stack E-Commerce Mini Store built as part of a structured internship road
 # Project Structure
 
 ```text
-E-Commerce Mini Store
+Cartify
 │
 ├── frontend
 │   └── src
@@ -348,8 +348,16 @@ MYSQL_HOST=localhost
 MYSQL_USER=root
 MYSQL_PASSWORD=your_mysql_password
 MYSQL_DATABASE=ecommerce
+MYSQL_PORT=3306
 JWT_SECRET=your_jwt_secret_key
 JWT_EXPIRES_IN=7d
+FRONTEND_URL=http://localhost:5173
+```
+
+Create a `.env` file inside the `frontend` directory:
+
+```env
+VITE_API_URL=http://localhost:5000
 ```
 
 ---

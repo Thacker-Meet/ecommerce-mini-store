@@ -12,6 +12,9 @@ function AdminLayout() {
     <div className="admin-layout-container">
       <aside className="admin-sidebar">
         <h2>Admin Panel</h2>
+        <Link to="/admin/dashboard" className={isActive("/admin/dashboard")}>
+          Dashboard
+        </Link>
         <Link to="/admin/products" className={isActive("/admin/products")}>
           Manage Products
         </Link>

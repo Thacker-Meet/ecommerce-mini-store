@@ -61,7 +61,7 @@ function LoginPage() {
         </h1>
 
         <p className="auth-subtitle">
-          Log in to your MiniStore account
+          Log in to your Cartify account
         </p>
 
         {error && (

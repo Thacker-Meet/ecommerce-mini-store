@@ -31,23 +31,26 @@ function ProductCard({ product }) {
       <div className="product-card">
         <div className="product-image-container">
           <img
-            src="https://via.placeholder.com/200"
+            src={product.image ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${product.image}` : "/placeholder.png"}
             alt={product.name}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.style.display = 'none';
+              e.target.parentNode.classList.add('no-image');
+            }}
           />
+          <div className="no-image-text">No Image Available</div>
         </div>
 
         <div className="product-info">
-          <div className="product-meta">
+          <div className="product-header">
             <h2>{product.name}</h2>
-            <p>{product.category}</p>
-            <p>
-              Stock: {product.stock}
-            </p>
+            <h3>₹ {product.price}</h3>
           </div>
-
-          <h3>
-            ₹ {product.price}
-          </h3>
+          <div className="product-meta">
+            <p>{product.category}</p>
+            <p>Stock: {product.stock}</p>
+          </div>
         </div>
 
         <button 
@@ -56,7 +59,7 @@ function ProductCard({ product }) {
           className={isInCart ? "go-to-cart-btn" : ""}
           style={{ 
             opacity: (product.stock <= 0 && !isInCart) ? 0.6 : 1,
-            backgroundColor: isInCart ? "#10b981" : "#111827"
+            backgroundColor: isInCart ? "var(--secondary-color)" : "var(--primary-color)"
           }}
         >
           {product.stock <= 0 && !isInCart ? "Out of Stock" : isInCart ? "Go to Cart" : "Add to Cart"}

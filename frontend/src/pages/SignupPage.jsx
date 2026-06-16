@@ -120,7 +120,7 @@ function SignupPage() {
         </h1>
 
         <p className="auth-subtitle">
-          Join MiniStore today
+          Join Cartify today
         </p>
 
         {error && (

@@ -28,11 +28,19 @@ function CartPage() {
           {cartItems.map((item) => (
             <div key={item.product._id} className="cart-item">
               <div className="cart-item-details">
-                <img
-                  src="https://via.placeholder.com/80"
-                  alt={item.product.name}
-                  className="cart-item-img"
-                />
+                <div className="cart-item-img-container">
+                  <img
+                    src={item.product.image ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${item.product.image}` : "/placeholder.png"}
+                    alt={item.product.name}
+                    className="cart-item-img"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.style.display = 'none';
+                      e.target.parentNode.classList.add('no-image');
+                    }}
+                  />
+                  <div className="no-image-text-small">No Image</div>
+                </div>
                 <div className="cart-item-info">
                   <h3>{item.product.name}</h3>
                   <p>Category: {item.product.category}</p>

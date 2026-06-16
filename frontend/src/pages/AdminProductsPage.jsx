@@ -19,7 +19,7 @@ const EMPTY_FORM = {
   category: "",
   price: "",
   stock: "",
-  images: "",
+  image: "",
 };
 
 function AdminProductsPage() {
@@ -88,7 +88,7 @@ function AdminProductsPage() {
       category: product.category || "",
       price: product.price?.toString() || "",
       stock: product.stock?.toString() || "",
-      images: product.images?.join(", ") || "",
+      image: product.image || "",
     });
     setFormError("");
     setShowModal(true);
@@ -130,9 +130,6 @@ function AdminProductsPage() {
     }
 
     const slug = generateSlug(formData.name);
-    const imagesArray = formData.images
-      ? formData.images.split(",").map((url) => url.trim()).filter(Boolean)
-      : [];
 
     const payload = {
       name: formData.name.trim(),
@@ -141,7 +138,7 @@ function AdminProductsPage() {
       category: formData.category.trim(),
       price: Number(formData.price),
       stock: Number(formData.stock),
-      images: imagesArray,
+      image: formData.image.trim(),
     };
 
     setFormLoading(true);
@@ -367,14 +364,14 @@ function AdminProductsPage() {
               </div>
 
               <div className="admin-form-group">
-                <label htmlFor="product-images">Image URLs (comma-separated)</label>
+                <label htmlFor="product-image">Image Path</label>
                 <input
                   type="text"
-                  id="product-images"
-                  name="images"
-                  value={formData.images}
+                  id="product-image"
+                  name="image"
+                  value={formData.image}
                   onChange={handleInputChange}
-                  placeholder="https://example.com/image1.jpg, https://..."
+                  placeholder="/images/product.jpg"
                 />
               </div>
 

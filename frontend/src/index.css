@@ -1,3 +1,18 @@
+:root {
+  --bg-color: #F5F7F8;
+  --primary-color: #0D5C63;
+  --secondary-color: #44A1A0;
+  --accent-color: #78CDD7;
+  --card-color: #FFFFFF;
+  --text-color: #111827;
+  --text-light: #4b5563;
+  --border-color: #e5e7eb;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -5,10 +20,71 @@
 }
 
 body {
+  font-family: 'Inter', 'Roboto', 'Outfit', Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
 
-  font-family: Arial, sans-serif;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
-  background-color: #f5f7fb;
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-  color: #111827;
+.fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.slide-up {
+  animation: slideUp 0.8s ease-out forwards;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+.btn-primary:hover {
+  background-color: var(--secondary-color);
+}
+
+.btn-secondary {
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+.btn-secondary:hover {
+  background-color: var(--secondary-color);
+  color: #fff;
 }

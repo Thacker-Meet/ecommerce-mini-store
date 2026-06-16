@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config();
 
 const connectMongoDB = require("./config/mongo");
@@ -18,9 +19,15 @@ const protectedRoutes =
   require(
     "./routes/protectedRoutes"
   );
+const adminRoutes = require("./routes/adminRoutes");
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  })
+);
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "../public")));
 
 connectMongoDB();
 connectMySQL();
@@ -37,6 +44,8 @@ app.use(
   "/api/protected",
   protectedRoutes
 );
+
+app.use("/api/admin", adminRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend Running");
