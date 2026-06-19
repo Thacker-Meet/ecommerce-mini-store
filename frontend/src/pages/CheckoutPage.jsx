@@ -55,7 +55,9 @@ function CheckoutPage() {
       
       // On success, clear cart and redirect to confirmation
       clearCart();
-      const orderId = response.data.orderId || response.data.id;
+      // Backend returns { success: true, data: { orderId, totalAmount } }
+      const orderPayload = response.data?.data || response.data;
+      const orderId = orderPayload.orderId || orderPayload.id;
       navigate(`/order-confirmation?orderId=${orderId}`);
     } catch (err) {
       console.error(err);

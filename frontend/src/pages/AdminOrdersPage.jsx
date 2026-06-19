@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import API from "../services/api";
 import "../styles/admin.css";
 import "../styles/status.css";
@@ -39,7 +39,16 @@ function AdminOrdersPage() {
     try {
       setLoading(true);
       const response = await API.get("/orders");
-      setOrders(response.data);
+      const payload = response.data;
+      // Backend returns { success: true, data: [...] }
+      const ordersArray = Array.isArray(payload)
+        ? payload
+        : Array.isArray(payload?.data)
+        ? payload.data
+        : Array.isArray(payload?.orders)
+        ? payload.orders
+        : [];
+      setOrders(ordersArray);
       setError("");
     } catch (err) {
       console.error("Failed to load orders for admin", err);
@@ -53,16 +62,18 @@ function AdminOrdersPage() {
     fetchAllOrders();
   }, [fetchAllOrders]);
 
+  const safeOrders = Array.isArray(orders) ? orders : [];
+
   // Filter orders
   const filteredOrders =
     activeFilter === "All"
-      ? orders
-      : orders.filter((order) => order.status?.toLowerCase() === activeFilter.toLowerCase());
+      ? safeOrders
+      : safeOrders.filter((order) => order.status?.toLowerCase() === activeFilter.toLowerCase());
 
   // Count per status
   const getStatusCount = (status) => {
-    if (status === "All") return orders.length;
-    return orders.filter((o) => o.status?.toLowerCase() === status.toLowerCase()).length;
+    if (status === "All") return safeOrders.length;
+    return safeOrders.filter((o) => o.status?.toLowerCase() === status.toLowerCase()).length;
   };
 
   // Toggle expand
@@ -182,9 +193,9 @@ function AdminOrdersPage() {
           </tr>
         </thead>
         <tbody>
-          {filteredOrders.map((order) => (
-            <>
-              <tr key={order.id}>
+          {Array.isArray(filteredOrders) && filteredOrders.map((order) => (
+            <React.Fragment key={order.id}>
+              <tr>
                 <td>
                   <button
                     className="admin-expand-btn"
@@ -225,7 +236,7 @@ function AdminOrdersPage() {
                   <td colSpan="7">
                     <div className="admin-order-items-inner">
                       <h4>Order Items</h4>
-                      {order.items && order.items.length > 0 ? (
+                      {Array.isArray(order.items) && order.items.length > 0 ? (
                         <div className="admin-order-items-list">
                           {order.items.map((item, idx) => (
                             <div key={idx} className="admin-order-item">
@@ -250,7 +261,7 @@ function AdminOrdersPage() {
                   </td>
                 </tr>
               )}
-            </>
+            </React.Fragment>
           ))}
           {filteredOrders.length === 0 && (
             <tr>

@@ -18,7 +18,7 @@ const createOrder = async (req, res) => {
   const { items } = req.body;
   
   if (!items || !Array.isArray(items) || items.length === 0) {
-    return res.status(400).json({ message: "No order items provided" });
+    return res.status(400).json({ success: false, message: "No order items provided" });
   }
 
   const decrementedItems = [];
@@ -52,7 +52,7 @@ const createOrder = async (req, res) => {
 
         // Trigger rollback for previously decremented items
         await rollbackMongoDBStock(decrementedItems);
-        return res.status(400).json({ message: errorMessage });
+        return res.status(400).json({ success: false, message: errorMessage });
       }
 
       // Track successful decrement for rollback purposes
@@ -78,7 +78,7 @@ const createOrder = async (req, res) => {
     } catch (mysqlError) {
       console.error("MySQL Order Insert Failed, rolling back MongoDB stocks...");
       await rollbackMongoDBStock(decrementedItems);
-      return res.status(500).json({ message: "Database write error. Order aborted.", error: mysqlError.message });
+      return res.status(500).json({ success: false, message: "Database write error. Order aborted.", error: mysqlError.message });
     }
 
     // Step 3: Insert order items into MySQL
@@ -105,21 +105,24 @@ const createOrder = async (req, res) => {
       } catch (cleanupErr) {
         console.error("Failed to delete orphaned order record:", cleanupErr);
       }
-      return res.status(500).json({ message: "Database items write error. Order aborted.", error: mysqlItemsError.message });
+      return res.status(500).json({ success: false, message: "Database items write error. Order aborted.", error: mysqlItemsError.message });
     }
 
     // Success response
     res.status(201).json({
+      success: true,
+      data: {
+        orderId,
+        totalAmount,
+      },
       message: "Order placed successfully",
-      orderId,
-      totalAmount,
     });
 
   } catch (error) {
     console.error("Order process error:", error);
     // General fallback rollback
     await rollbackMongoDBStock(decrementedItems);
-    res.status(500).json({ message: "Order placement failed", error: error.message });
+    res.status(500).json({ success: false, message: "Order placement failed", error: error.message });
   }
 };
 
@@ -153,7 +156,7 @@ const getMyOrders = async (req, res) => {
     );
 
     if (orders.length === 0) {
-      return res.json([]);
+      return res.json({ success: true, data: [] });
     }
 
     // Fetch all items for these orders
@@ -171,10 +174,10 @@ const getMyOrders = async (req, res) => {
       };
     });
 
-    res.json(ordersWithItems);
+    res.json({ success: true, data: ordersWithItems });
   } catch (error) {
     console.error("Error fetching my orders:", error);
-    res.status(500).json({ message: "Failed to fetch orders", error: error.message });
+    res.status(500).json({ success: false, message: "Failed to fetch orders", error: error.message });
   }
 };
 
@@ -189,7 +192,7 @@ const getAllOrders = async (req, res) => {
     );
 
     if (orders.length === 0) {
-      return res.json([]);
+      return res.json({ success: true, data: [] });
     }
 
     // Fetch all items
@@ -205,10 +208,10 @@ const getAllOrders = async (req, res) => {
       };
     });
 
-    res.json(ordersWithItems);
+    res.json({ success: true, data: ordersWithItems });
   } catch (error) {
     console.error("Error fetching all orders:", error);
-    res.status(500).json({ message: "Failed to fetch orders", error: error.message });
+    res.status(500).json({ success: false, message: "Failed to fetch orders", error: error.message });
   }
 };
 
@@ -224,6 +227,7 @@ const updateOrderStatus = async (req, res) => {
 
     if (!status || !validStatuses.includes(status)) {
       return res.status(400).json({
+        success: false,
         message: `Invalid status. Must be one of: ${validStatuses.join(", ")}`,
       });
     }
@@ -232,20 +236,23 @@ const updateOrderStatus = async (req, res) => {
     const existingOrder = await query("SELECT id FROM orders WHERE id = ?", [id]);
 
     if (existingOrder.length === 0) {
-      return res.status(404).json({ message: "Order not found" });
+      return res.status(404).json({ success: false, message: "Order not found" });
     }
 
     // Update the status
     await query("UPDATE orders SET status = ? WHERE id = ?", [status, id]);
 
     res.json({
+      success: true,
+      data: {
+        orderId: Number(id),
+        status,
+      },
       message: "Order status updated successfully",
-      orderId: Number(id),
-      status,
     });
   } catch (error) {
     console.error("Error updating order status:", error);
-    res.status(500).json({ message: "Failed to update order status", error: error.message });
+    res.status(500).json({ success: false, message: "Failed to update order status", error: error.message });
   }
 };
 

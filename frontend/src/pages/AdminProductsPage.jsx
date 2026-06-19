@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import API from "../services/api";
 import "../styles/admin.css";
 import "../styles/status.css";
@@ -33,6 +33,8 @@ function AdminProductsPage() {
   const [formData, setFormData] = useState(EMPTY_FORM);
   const [formLoading, setFormLoading] = useState(false);
   const [formError, setFormError] = useState("");
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = useRef(null);
 
   // Delete confirm state
   const [deleteTarget, setDeleteTarget] = useState(null);
@@ -57,7 +59,16 @@ function AdminProductsPage() {
     try {
       setLoading(true);
       const response = await API.get("/products");
-      setProducts(response.data.products || response.data);
+      const payload = response.data;
+      // Backend returns { success: true, data: [...], ... }
+      const productsArray = Array.isArray(payload)
+        ? payload
+        : Array.isArray(payload?.data)
+        ? payload.data
+        : Array.isArray(payload?.products)
+        ? payload.products
+        : [];
+      setProducts(productsArray);
       setError("");
     } catch (err) {
       console.error("Failed to load products for admin", err);
@@ -106,6 +117,43 @@ function AdminProductsPage() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const uploadImage = async (file) => {
+    const data = new FormData();
+    data.append("image", file);
+    setUploadingImage(true);
+    setFormError("");
+    try {
+      const res = await API.post("/upload", data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setFormData((prev) => ({ ...prev, image: res.data.image }));
+      addToast("Image uploaded successfully!");
+    } catch (err) {
+      setFormError(err.response?.data?.message || "Failed to upload image");
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      uploadImage(file);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      uploadImage(file);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
   };
 
   // Submit form (create or update)
@@ -244,7 +292,7 @@ function AdminProductsPage() {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {Array.isArray(products) && products.map((product) => (
             <tr key={product._id}>
               <td style={{ fontWeight: 600 }}>{product.name}</td>
               <td>
@@ -364,7 +412,42 @@ function AdminProductsPage() {
               </div>
 
               <div className="admin-form-group">
-                <label htmlFor="product-image">Image Path</label>
+                <label>Product Image</label>
+                <div 
+                  className="image-upload-area" 
+                  onDrop={handleDrop} 
+                  onDragOver={handleDragOver}
+                  onClick={() => fileInputRef.current.click()}
+                  style={{
+                    border: '2px dashed #cbd5e1',
+                    borderRadius: '8px',
+                    padding: '20px',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    background: '#f8fafc',
+                    position: 'relative',
+                    marginBottom: '10px'
+                  }}
+                >
+                  {uploadingImage ? (
+                    <p>Uploading...</p>
+                  ) : formData.image ? (
+                    <div>
+                      <img src={formData.image.startsWith('http') ? formData.image : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${formData.image.startsWith('/') ? '' : '/'}${formData.image}`} alt="Preview" style={{maxHeight: '100px', objectFit: 'contain', marginBottom: '10px'}} />
+                      <p style={{margin: 0, fontSize: '0.85rem', color: '#64748b'}}>Click or drag to replace image</p>
+                    </div>
+                  ) : (
+                    <p style={{margin: 0, color: '#64748b'}}>Drag & drop an image here, or click to select</p>
+                  )}
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    accept="image/*"
+                    style={{ display: "none" }}
+                  />
+                </div>
+                
                 <input
                   type="text"
                   id="product-image"
@@ -372,6 +455,7 @@ function AdminProductsPage() {
                   value={formData.image}
                   onChange={handleInputChange}
                   placeholder="/images/product.jpg"
+                  style={{marginTop: '10px'}}
                 />
               </div>
 

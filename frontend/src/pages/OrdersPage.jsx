@@ -14,8 +14,16 @@ function OrdersPage() {
     const fetchOrders = async () => {
       try {
         const response = await API.get("/orders/my-orders");
-        // Expecting response.data to be an array of orders (each order contains its items)
-        setOrders(response.data);
+        const payload = response.data;
+        // Backend returns { success: true, data: [...] }
+        const ordersArray = Array.isArray(payload)
+          ? payload
+          : Array.isArray(payload?.data)
+          ? payload.data
+          : Array.isArray(payload?.orders)
+          ? payload.orders
+          : [];
+        setOrders(ordersArray);
       } catch (err) {
         console.error("Failed to fetch orders", err);
         setError("Could not load your order history. Please try again later.");
@@ -46,19 +54,21 @@ function OrdersPage() {
     );
   }
 
+  const safeOrders = Array.isArray(orders) ? orders : [];
+
   return (
     <div className="cart-container">
       <h1 className="cart-title">Order History</h1>
       <p style={{ marginBottom: "20px" }}>Logged in as: <strong>{user?.name}</strong> ({user?.email})</p>
 
-      {orders.length === 0 ? (
+      {safeOrders.length === 0 ? (
         <div className="empty-cart-container" style={{ padding: "40px" }}>
           <h2>No Orders Found</h2>
           <p>You haven't placed any orders yet.</p>
         </div>
       ) : (
         <div className="orders-list">
-          {orders.map((order) => (
+          {safeOrders.map((order) => (
             <div key={order.id} className="order-card">
               <div className="order-header">
                 <div className="order-meta-info">
@@ -75,12 +85,12 @@ function OrdersPage() {
                     <p>{order.id}</p>
                   </div>
                 </div>
-                <div className={`order-status ${order.status.toLowerCase()}`}>
+                <div className={`order-status ${(order.status || "").toLowerCase()}`}>
                   {order.status}
                 </div>
               </div>
               <div className="order-items-grid">
-                {order.items && order.items.map((item, idx) => (
+                {Array.isArray(order.items) && order.items.map((item, idx) => (
                   <div key={item.id || idx} className="order-item-row">
                     <span className="order-item-name">
                       {item.product_name} <strong style={{ color: "#111827" }}>x {item.quantity}</strong>

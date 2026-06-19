@@ -27,22 +27,19 @@ const getProducts = async (req, res) => {
     const totalProducts = await Product.countDocuments(filter);
 
     res.status(200).json({
-
-      products,
-
+      success: true,
+      data: products,
       currentPage: page,
-
       totalPages: Math.ceil(totalProducts / limit),
-
       totalProducts,
-
     });
 
   } catch (error) {
 
-    res.status(500);
-
-    throw new Error(error.message);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
@@ -55,15 +52,20 @@ const getProductById = async (req, res) => {
 
     if (!product) {
       return res.status(404).json({
+        success: false,
         message: "Product not found",
       });
     }
 
-    res.json(product);
+    res.json({
+      success: true,
+      data: product,
+    });
 
   } catch (error) {
 
     res.status(500).json({
+      success: false,
       message: error.message,
     });
   }
@@ -76,11 +78,15 @@ const createProduct = async (req, res) => {
 
     const product = await Product.create(req.body);
 
-    res.status(201).json(product);
+    res.status(201).json({
+      success: true,
+      data: product,
+    });
 
   } catch (error) {
 
     res.status(500).json({
+      success: false,
       message: error.message,
     });
   }
@@ -101,15 +107,20 @@ const updateProduct = async (req, res) => {
 
     if (!updatedProduct) {
       return res.status(404).json({
+        success: false,
         message: "Product not found",
       });
     }
 
-    res.json(updatedProduct);
+    res.json({
+      success: true,
+      data: updatedProduct,
+    });
 
   } catch (error) {
 
     res.status(500).json({
+      success: false,
       message: error.message,
     });
   }
@@ -124,17 +135,20 @@ const deleteProduct = async (req, res) => {
 
     if (!deletedProduct) {
       return res.status(404).json({
+        success: false,
         message: "Product not found",
       });
     }
 
     res.json({
+      success: true,
       message: "Product deleted successfully",
     });
 
   } catch (error) {
 
     res.status(500).json({
+      success: false,
       message: error.message,
     });
   }

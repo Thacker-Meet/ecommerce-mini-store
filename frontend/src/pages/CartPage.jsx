@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import useCart from "../hooks/useCart";
+import { getImageUrl } from "../utils/imageUtils";
 import "../styles/cart.css";
 
 function CartPage() {
@@ -30,7 +31,7 @@ function CartPage() {
               <div className="cart-item-details">
                 <div className="cart-item-img-container">
                   <img
-                    src={item.product.image ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${item.product.image}` : "/placeholder.png"}
+                    src={getImageUrl(item.product.image)}
                     alt={item.product.name}
                     className="cart-item-img"
                     onError={(e) => {

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import API from "../services/api";
 import useCart from "../hooks/useCart";
+import { getImageUrl } from "../utils/imageUtils";
 
 import "../styles/productDetail.css";
 import "../styles/status.css";
@@ -18,7 +19,10 @@ function ProductDetailPage() {
     const fetchProduct = async () => {
       try {
         const response = await API.get(`/products/${id}`);
-        setProduct(response.data);
+        const payload = response.data;
+        // Backend returns { success: true, data: {...} }
+        const productData = payload?.data || payload;
+        setProduct(productData);
         setLoading(false);
       } catch (err) {
         setError("Failed to fetch product");
@@ -83,7 +87,7 @@ function ProductDetailPage() {
       <div className="detail-card">
         <div className="detail-image">
           <img
-            src={product.image ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${product.image}` : "/placeholder.png"}
+            src={getImageUrl(product.image)}
             alt={product.name}
             onError={(e) => {
               e.target.onerror = null;

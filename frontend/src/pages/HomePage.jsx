@@ -16,10 +16,19 @@ function HomePage() {
     const fetchProducts = async () => {
       try {
         const response = await API.get("/products");
-        setProducts(response.data.products || response.data);
-        setLoading(false);
+        const payload = response.data;
+        // Backend returns { success: true, data: [...], currentPage, totalPages, totalProducts }
+        const productsArray = Array.isArray(payload)
+          ? payload
+          : Array.isArray(payload?.data)
+          ? payload.data
+          : Array.isArray(payload?.products)
+          ? payload.products
+          : [];
+        setProducts(productsArray);
       } catch (err) {
         setError("Failed to fetch products");
+      } finally {
         setLoading(false);
       }
     };
@@ -47,7 +56,7 @@ function HomePage() {
     );
   }
 
-  const popularProducts = products.slice(0, 8);
+  const popularProducts = Array.isArray(products) ? products.slice(0, 8) : [];
 
   return (
     <div className="home-container">
@@ -67,9 +76,13 @@ function HomePage() {
       <section className="popular-products-section container slide-up">
         <h2 className="section-title">Popular Products</h2>
         <div className="product-grid">
-          {popularProducts.map((product) => (
-            <ProductCard key={product._id} product={product} />
-          ))}
+          {Array.isArray(popularProducts) && popularProducts.length > 0 ? (
+            popularProducts.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))
+          ) : (
+            <p className="no-products">No popular products available.</p>
+          )}
         </div>
       </section>
 

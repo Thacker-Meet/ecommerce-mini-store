@@ -24,7 +24,16 @@ function ProductListPage() {
     const fetchProducts = async () => {
       try {
         const response = await API.get("/products");
-        setProducts(response.data.products || response.data);
+        const payload = response.data;
+        // Backend returns { success: true, data: [...], ... }
+        const productsArray = Array.isArray(payload)
+          ? payload
+          : Array.isArray(payload?.data)
+          ? payload.data
+          : Array.isArray(payload?.products)
+          ? payload.products
+          : [];
+        setProducts(productsArray);
         setLoading(false);
       } catch (err) {
         setError("Failed to fetch products");
@@ -47,7 +56,9 @@ function ProductListPage() {
     "Accessories",
   ];
 
-  const filteredProducts = products.filter((product) => {
+  const safeProducts = Array.isArray(products) ? products : [];
+
+  const filteredProducts = safeProducts.filter((product) => {
     const matchesCategory =
       selectedCategory === "All" ||
       product.category === selectedCategory;

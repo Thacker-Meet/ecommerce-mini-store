@@ -34,13 +34,16 @@ const getRevenue = async (req, res) => {
     })).sort((a, b) => a.date.localeCompare(b.date));
 
     res.json({
-      totalRevenue,
-      totalOrders,
-      revenueByDay
+      success: true,
+      data: {
+        totalRevenue,
+        totalOrders,
+        revenueByDay,
+      },
     });
   } catch (error) {
     console.error("Error fetching revenue:", error);
-    res.status(500).json({ message: "Failed to fetch revenue", error: error.message });
+    res.status(500).json({ success: false, message: "Failed to fetch revenue", error: error.message });
   }
 };
 

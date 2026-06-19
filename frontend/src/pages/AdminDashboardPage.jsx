@@ -19,13 +19,10 @@ function AdminDashboardPage() {
   useEffect(() => {
     const fetchRevenue = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const { data } = await API.get("/admin/revenue");
+        const response = await API.get("/admin/revenue");
+        const payload = response.data;
+        // Backend returns { success: true, data: { totalRevenue, totalOrders, revenueByDay } }
+        const data = payload?.data || payload;
         setRevenueData(data);
         setLoading(false);
       } catch (err) {
@@ -59,6 +56,8 @@ function AdminDashboardPage() {
     );
   }
 
+  const safeRevenueByDay = Array.isArray(revenueData?.revenueByDay) ? revenueData.revenueByDay : [];
+
   return (
     <>
       <div className="admin-header">
@@ -69,13 +68,13 @@ function AdminDashboardPage() {
         <div className="admin-dashboard-card" style={{ background: 'white', padding: '24px', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
           <h3 style={{ margin: '0 0 10px', color: '#64748b', fontSize: '0.9rem', textTransform: 'uppercase' }}>Total Revenue</h3>
           <div style={{ fontSize: '2rem', fontWeight: '800', color: '#0f172a' }}>
-            {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(revenueData.totalRevenue)}
+            {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(revenueData?.totalRevenue || 0)}
           </div>
         </div>
         <div className="admin-dashboard-card" style={{ background: 'white', padding: '24px', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
           <h3 style={{ margin: '0 0 10px', color: '#64748b', fontSize: '0.9rem', textTransform: 'uppercase' }}>Total Orders</h3>
           <div style={{ fontSize: '2rem', fontWeight: '800', color: '#0f172a' }}>
-            {revenueData.totalOrders}
+            {revenueData?.totalOrders || 0}
           </div>
         </div>
       </div>
@@ -85,7 +84,7 @@ function AdminDashboardPage() {
         <div style={{ height: '400px', width: '100%' }}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
-              data={revenueData.revenueByDay}
+              data={safeRevenueByDay}
               margin={{
                 top: 5,
                 right: 30,
